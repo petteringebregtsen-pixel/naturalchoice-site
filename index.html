@@ -135,7 +135,7 @@
       </div>
 
       <div class="nc-game-status" id="ncGameStatus">
-        Triple-click the logo to find this. Ready?
+        Double-click the logo to find this.
       </div>
 
       <div class="nc-game-arena" id="ncGameArena"></div>
@@ -173,6 +173,7 @@
         overlay.classList.add("is-open");
         overlay.setAttribute("aria-hidden", "false");
         document.body.classList.add("nc-lock-scroll");
+        statusEl.textContent = "Nice. You found it.";
       }
 
       function closeGame() {
@@ -187,7 +188,6 @@
         lives = 3;
         level = 1;
         updateStats();
-        statusEl.textContent = "Catch the logos before they disappear.";
         arena.innerHTML = "";
       }
 
@@ -311,7 +311,7 @@
         stopGame();
         resetStats();
         running = true;
-        statusEl.textContent = "Game on.";
+        statusEl.textContent = "Catch them before they disappear.";
         gameLoop();
       }
 
@@ -323,7 +323,7 @@
           clickCount = 0;
         }, 450);
 
-        if (clickCount === 1) {
+        if (clickCount === 2) {
           event.preventDefault();
           clickCount = 0;
           openGame();
