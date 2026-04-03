@@ -185,3 +185,7 @@ h3 {
     flex-direction: column;
   }
 }
+.logo {
+  height: 28px;
+  width: auto;
+}
