@@ -199,7 +199,7 @@
     }
 
     .nc-target.is-escaping {
-      transition: left 0.18s ease, top 0.18s ease, transform 0.12s ease;
+      transition: left 0.16s ease, top 0.16s ease, transform 0.12s ease;
     }
 
     .nc-target img {
@@ -468,7 +468,6 @@
       const statusEl = document.getElementById("ncGameStatus");
 
       const STORAGE_KEY = "naturalchoice_logo_game_highscore";
-      const PLAY_COUNT_KEY = "naturalchoice_logo_game_playcount";
       const DOUBLE_CLICK_WINDOW = 320;
       const GAME_OVER_LINES = [
         "You lasted longer than expected.",
@@ -485,11 +484,62 @@
         "Sweden is close",
         "brand protection",
         "carry on",
-        "respect"
+        "respect",
+        "that looked intentional",
+        "legally impressive",
+        "snack reflexes",
+        "questionable talent",
+        "someone call HR",
+        "extremely online",
+        "unlikely scenes",
+        "calm hands",
+        "retail energy",
+        "unexpected form",
+        "good grief",
+        "bit weird",
+        "focus mode",
+        "concerning pace",
+        "absolutely not",
+        "you’ve done this before",
+        "strong wrists",
+        "nordic urgency",
+        "free hands-on experience",
+        "brand secured",
+        "too efficient",
+        "this is not in the business plan",
+        "it’s giving procurement",
+        "fast for no reason",
+        "alarming momentum",
+        "founder behaviour",
+        "look at you go",
+        "that one counted",
+        "elite nonsense",
+        "someone is locked in",
+        "you cannot put this on your CV",
+        "oddly professional",
+        "still employed",
+        "possibly overqualified",
+        "calbee would notice",
+        "less talk more tap",
+        "retail never sleeps",
+        "this is becoming a situation",
+        "mild panic",
+        "hands. eyes. timing.",
+        "not in slides",
+        "this is field work",
+        "deeply unserious",
+        "please remain seated",
+        "very snack-coded",
+        "a bit too smooth",
+        "precision farming",
+        "suspiciously stable",
+        "you and the logo have history",
+        "this escalated",
+        "kind of elite",
+        "hello speed"
       ];
 
       let highScore = Number(localStorage.getItem(STORAGE_KEY) || 0);
-      let playCount = Number(localStorage.getItem(PLAY_COUNT_KEY) || 0);
 
       let score = 0;
       let lives = 4;
@@ -551,7 +601,7 @@
           playTone(820, 0.06, "triangle", 0.03);
           window.setTimeout(() => playTone(1080, 0.08, "sine", 0.02), 35);
         } else {
-          playTone(520 + Math.random() * 80, 0.035, "triangle", 0.022);
+          playTone(520 + Math.random() * 70, 0.032, "triangle", 0.022);
         }
       }
 
@@ -612,28 +662,31 @@
       }
 
       function getSpawnInterval() {
-        return Math.max(520, 980 - (level - 1) * 26);
+        return Math.max(420, 950 - (level - 1) * 34);
       }
 
       function getLogoLifetime() {
-        return Math.max(1200, 2100 - (level - 1) * 34);
+        return Math.max(760, 1750 - (level - 1) * 46);
       }
 
       function getLogoSize() {
-        return Math.max(60, 132 - (level - 1) * 2);
+        return Math.max(54, 128 - (level - 1) * 2.8);
       }
 
       function getLogosPerWave() {
-        return Math.min(4, 1 + Math.floor((level - 1) / 10));
+        if (level < 4) return 1;
+        if (level < 8) return 2;
+        if (level < 13) return 3;
+        return 4;
       }
 
       function updateLevel() {
-        level = 1 + Math.floor(score / 12);
+        level = 1 + Math.floor(score / 10);
         updateStats();
       }
 
       function maybeMidComment() {
-        if (score > 0 && score % 12 === 0) {
+        if (score > 0 && score % 6 === 0) {
           showBigComment(randomFrom(MID_COMMENTS));
         }
       }
@@ -685,14 +738,16 @@
 
       function maybeEscape(target, size) {
         if (!running) return;
-        if (Math.random() > 0.22) return;
+
+        const escapeChance = Math.min(0.5, 0.12 + level * 0.018);
+        if (Math.random() > escapeChance) return;
 
         const arenaRect = arena.getBoundingClientRect();
         const currentLeft = parseFloat(target.style.left);
         const currentTop = parseFloat(target.style.top);
 
-        const shiftX = (Math.random() < 0.5 ? -1 : 1) * (26 + Math.random() * 34);
-        const shiftY = (Math.random() < 0.5 ? -1 : 1) * (12 + Math.random() * 24);
+        const shiftX = (Math.random() < 0.5 ? -1 : 1) * (30 + Math.random() * 44);
+        const shiftY = (Math.random() < 0.5 ? -1 : 1) * (14 + Math.random() * 28);
 
         const maxLeft = arenaRect.width - size - 10;
         const maxTop = arenaRect.height - size - 10;
@@ -704,14 +759,14 @@
         target.style.left = `${nextLeft}px`;
         target.style.top = `${nextTop}px`;
 
-        if (Math.random() < 0.18) {
+        if (Math.random() < 0.14) {
           showBigComment("to Sweden");
         }
       }
 
       function maybeFakeBug() {
         if (!fakeBugThisGame || fakeBugUsed || !running) return false;
-        if (Math.random() > 0.08) return false;
+        if (Math.random() > 0.07) return false;
 
         fakeBugUsed = true;
         showBigComment("lag. sorry.");
@@ -731,7 +786,7 @@
         const y = padding + Math.random() * (maxY - padding);
 
         totalSpawnedThisGame += 1;
-        const isGolden = totalSpawnedThisGame % 30 === 0;
+        const isGolden = totalSpawnedThisGame % 40 === 0;
 
         const target = document.createElement("button");
         target.type = "button";
@@ -819,8 +874,6 @@
         ensureAudio();
         stopGame();
         resetStats();
-        playCount += 1;
-        localStorage.setItem(PLAY_COUNT_KEY, String(playCount));
         fakeBugThisGame = Math.random() < 0.25;
         running = true;
         statusEl.textContent = "Tap the logos before they escape.";
