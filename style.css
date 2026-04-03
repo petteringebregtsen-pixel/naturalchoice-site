@@ -53,9 +53,10 @@ a {
 }
 
 .nav {
-  display: flex;
+  display: grid;
+  grid-template-columns: auto 1fr auto;
   align-items: center;
-  justify-content: space-between;
+  gap: 24px;
   min-height: 132px;
   padding: 10px 0 8px;
 }
@@ -74,6 +75,7 @@ a {
 
 .nav-links {
   display: flex;
+  justify-content: center;
   gap: 28px;
   align-items: center;
 }
@@ -88,7 +90,26 @@ a {
   color: var(--text);
 }
 
-/* HERO */
+.language-switch {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.lang-link {
+  font-size: 0.92rem;
+  color: var(--muted);
+  transition: color 0.18s ease, opacity 0.18s ease;
+}
+
+.lang-link:hover {
+  color: var(--text);
+}
+
+.lang-link.active {
+  color: var(--text);
+  font-weight: 600;
+}
 
 .hero {
   position: relative;
@@ -108,7 +129,6 @@ a {
     linear-gradient(180deg, #f4f6f3 0%, #f3f5f1 100%);
 }
 
-/* Aurora layers */
 .aurora-layer {
   position: absolute;
   z-index: 1;
@@ -213,8 +233,6 @@ a {
   }
 }
 
-/* TYPOGRAPHY */
-
 .eyebrow {
   margin: 0 0 16px;
   color: var(--muted);
@@ -268,8 +286,6 @@ h3 {
   flex-wrap: wrap;
 }
 
-/* BUTTONS */
-
 .button {
   display: inline-flex;
   align-items: center;
@@ -295,8 +311,6 @@ h3 {
   color: var(--text);
   background: transparent;
 }
-
-/* SECTIONS */
 
 .statement {
   padding: 84px 0 32px;
@@ -328,8 +342,6 @@ h3 {
   border-top: 1px solid var(--line);
 }
 
-/* INNER PAGES */
-
 .page {
   min-height: calc(100vh - 132px);
 }
@@ -347,7 +359,7 @@ h3 {
 }
 
 .about-copy p + p {
-  margin-top: 18px;
+  margin-top: 10px;
 }
 
 .lead {
@@ -363,8 +375,6 @@ h3 {
 .email-link.large {
   font-size: 1.38rem;
 }
-
-/* MOBILE */
 
 @media (max-width: 980px) {
   .aurora-one {
@@ -387,21 +397,28 @@ h3 {
     right: 80px;
     top: 215px;
   }
+
+  .nav {
+    grid-template-columns: 1fr;
+    justify-items: center;
+    gap: 10px;
+    padding: 14px 0 10px;
+  }
+
+  .nav-links {
+    gap: 18px;
+    flex-wrap: wrap;
+  }
 }
 
 @media (max-width: 800px) {
   .nav {
-    min-height: 110px;
-    padding: 8px 0 6px;
+    min-height: auto;
   }
 
   .logo {
     height: 110px;
     transform: translateY(4px);
-  }
-
-  .nav-links {
-    gap: 18px;
   }
 
   .hero {
