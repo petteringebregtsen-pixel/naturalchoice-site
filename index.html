@@ -1,213 +1,349 @@
-<script>
-  (function () {
-    const logoTrigger = document.getElementById("logoTrigger");
-    const overlay = document.getElementById("ncGameOverlay");
-    const closeBtn = document.getElementById("ncGameClose");
-    const startBtn = document.getElementById("ncStartGame");
-    const restartBtn = document.getElementById("ncRestartGame");
-    const arena = document.getElementById("ncGameArena");
-    const scoreEl = document.getElementById("ncScore");
-    const highScoreEl = document.getElementById("ncHighScore");
-    const livesEl = document.getElementById("ncLives");
-    const levelEl = document.getElementById("ncLevel");
-    const statusEl = document.getElementById("ncGameStatus");
+<!DOCTYPE html>
+<html lang="no">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-    const STORAGE_KEY = "naturalchoice_logo_game_highscore";
-    let highScore = Number(localStorage.getItem(STORAGE_KEY) || 0);
+  <title>Naturalchoice – Vi bygger sterke snack brands i Norden</title>
+  <meta name="description" content="Naturalchoice bygger og utvikler utvalgte snack brands i Norden gjennom kommersiell forståelse og lokal gjennomføring." />
 
-    let score = 0;
-    let lives = 3;
-    let level = 1;
-    let running = false;
-    let spawnTimer = null;
+  <meta property="og:title" content="Naturalchoice – Vi bygger sterke snack brands i Norden" />
+  <meta property="og:description" content="Naturalchoice bygger og utvikler utvalgte snack brands i Norden gjennom kommersiell forståelse og lokal gjennomføring." />
+  <meta property="og:image" content="https://naturalchoice.no/thumbnail.png?v=2" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta property="og:url" content="https://naturalchoice.no/" />
+  <meta property="og:type" content="website" />
 
-    let clickCount = 0;
-    let clickResetTimer = null;
-    let singleClickTimer = null;
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Naturalchoice – Vi bygger sterke snack brands i Norden" />
+  <meta name="twitter:description" content="Naturalchoice bygger og utvikler utvalgte snack brands i Norden gjennom kommersiell forståelse og lokal gjennomføring." />
+  <meta name="twitter:image" content="https://naturalchoice.no/thumbnail.png?v=2" />
 
-    highScoreEl.textContent = highScore;
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header class="site-header">
+    <div class="container nav">
+      <a href="/" class="brand" aria-label="Naturalchoice hjem" id="logoTrigger">
+        <img src="logo.png" alt="Naturalchoice logo" class="logo" />
+      </a>
 
-    function openGame() {
-      overlay.classList.add("is-open");
-      overlay.setAttribute("aria-hidden", "false");
-      document.body.classList.add("nc-lock-scroll");
-    }
+      <nav class="nav-links" aria-label="Hovedmeny">
+        <a href="about.html">Hva vi gjør</a>
+        <a href="careers-en.html">Karriere</a>
+        <a href="contact.html">Kontakt</a>
+      </nav>
 
-    function closeGame() {
-      stopGame();
-      overlay.classList.remove("is-open");
-      overlay.setAttribute("aria-hidden", "true");
-      document.body.classList.remove("nc-lock-scroll");
-    }
+      <div class="language-switch" aria-label="Språkvalg">
+        <a href="index.html" class="lang-link active">NO</a>
+        <a href="index-en.html" class="lang-link">EN</a>
+      </div>
+    </div>
+  </header>
 
-    function resetStats() {
-      score = 0;
-      lives = 3;
-      level = 1;
-      updateStats();
-      statusEl.textContent = "Catch the logos before they disappear.";
-      arena.innerHTML = "";
-    }
+  <main>
+    <section class="hero hero-aurora">
+      <div class="aurora-layer aurora-one"></div>
+      <div class="aurora-layer aurora-two"></div>
+      <div class="aurora-layer aurora-three"></div>
 
-    function updateStats() {
-      scoreEl.textContent = score;
-      livesEl.textContent = lives;
-      levelEl.textContent = level;
+      <div class="container hero-inner">
+        <p class="eyebrow">Nordisk markedsinngang, gjort ordentlig.</p>
+
+        <h1>Vi bygger sterke snack brands i Norden.</h1>
+
+        <p class="hero-text">
+          Naturalchoice samarbeider med utvalgte brands for å bygge sterk lokal tilstedeværelse gjennom kommersiell forståelse og hands-on gjennomføring.
+        </p>
+
+        <div class="hero-actions">
+          <a class="button primary" href="contact.html">Kontakt oss</a>
+          <a class="button secondary" href="about.html">Hva vi gjør</a>
+        </div>
+      </div>
+    </section>
+
+    <section class="statement">
+      <div class="container narrow center">
+        <h2>Vi distribuerer ikke bare produkter. Vi bygger dem i markedet.</h2>
+      </div>
+    </section>
+
+    <section class="capabilities">
+      <div class="container grid-two">
+        <article class="capability">
+          <p class="eyebrow">Kommersiell forståelse</p>
+          <h3>Fra posisjonering til sell-through.</h3>
+          <p>
+            Vi forstår hva som skal til for å introdusere og utvikle produkter i det nordiske dagligvarelandskapet.
+          </p>
+        </article>
+
+        <article class="capability">
+          <p class="eyebrow">Lokal gjennomføring</p>
+          <h3>Strukturert, praktisk og hands-on.</h3>
+          <p>
+            Vi jobber tett med partnere og retail for å bygge momentum steg for steg.
+          </p>
+        </article>
+      </div>
+    </section>
+
+    <section class="contact-preview">
+      <div class="container narrow center">
+        <h2>For henvendelser, kontakt oss på</h2>
+        <p><a class="email-link" href="mailto:post@naturalchoice.no">post@naturalchoice.no</a></p>
+      </div>
+    </section>
+  </main>
+
+  <div class="nc-game-overlay" id="ncGameOverlay" aria-hidden="true">
+    <div class="nc-game-panel">
+      <button class="nc-game-close" id="ncGameClose" aria-label="Lukk spill">×</button>
+
+      <div class="nc-game-header">
+        <p class="nc-game-kicker">Hidden mode</p>
+        <h2>Catch the Naturalchoice logos</h2>
+        <p class="nc-game-sub">
+          Trykk logoene før de forsvinner. Jo høyere score, jo raskere blir det.
+        </p>
+      </div>
+
+      <div class="nc-game-stats">
+        <div class="nc-stat">
+          <span class="nc-stat-label">Score</span>
+          <strong id="ncScore">0</strong>
+        </div>
+        <div class="nc-stat">
+          <span class="nc-stat-label">High score</span>
+          <strong id="ncHighScore">0</strong>
+        </div>
+        <div class="nc-stat">
+          <span class="nc-stat-label">Lives</span>
+          <strong id="ncLives">3</strong>
+        </div>
+        <div class="nc-stat">
+          <span class="nc-stat-label">Level</span>
+          <strong id="ncLevel">1</strong>
+        </div>
+      </div>
+
+      <div class="nc-game-controls">
+        <button class="button primary" id="ncStartGame" type="button">Start game</button>
+        <button class="button secondary" id="ncRestartGame" type="button">Restart</button>
+      </div>
+
+      <div class="nc-game-status" id="ncGameStatus">
+        Triple-click the logo to find this. Ready?
+      </div>
+
+      <div class="nc-game-arena" id="ncGameArena"></div>
+    </div>
+  </div>
+
+  <script>
+    (() => {
+      const logoTrigger = document.getElementById("logoTrigger");
+      const overlay = document.getElementById("ncGameOverlay");
+      const closeBtn = document.getElementById("ncGameClose");
+      const startBtn = document.getElementById("ncStartGame");
+      const restartBtn = document.getElementById("ncRestartGame");
+      const arena = document.getElementById("ncGameArena");
+      const scoreEl = document.getElementById("ncScore");
+      const highScoreEl = document.getElementById("ncHighScore");
+      const livesEl = document.getElementById("ncLives");
+      const levelEl = document.getElementById("ncLevel");
+      const statusEl = document.getElementById("ncGameStatus");
+
+      const STORAGE_KEY = "naturalchoice_logo_game_highscore";
+      let highScore = Number(localStorage.getItem(STORAGE_KEY) || 0);
+
+      let score = 0;
+      let lives = 3;
+      let level = 1;
+      let running = false;
+      let spawnTimer = null;
+      let clickCount = 0;
+      let clickResetTimer = null;
+
       highScoreEl.textContent = highScore;
-    }
 
-    function getSpawnInterval() {
-      return Math.max(420, 1200 - (level - 1) * 85);
-    }
-
-    function getLogoLifetime() {
-      return Math.max(650, 1800 - (level - 1) * 95);
-    }
-
-    function getLogoSize() {
-      return Math.max(34, 72 - (level - 1) * 2);
-    }
-
-    function getLogosPerWave() {
-      return Math.min(4, 1 + Math.floor((level - 1) / 3));
-    }
-
-    function updateLevel() {
-      level = 1 + Math.floor(score / 8);
-      updateStats();
-    }
-
-    function handleMiss() {
-      if (!running) return;
-      lives -= 1;
-      updateStats();
-      if (lives <= 0) gameOver();
-    }
-
-    function gameOver() {
-      stopGame();
-      if (score > highScore) {
-        highScore = score;
-        localStorage.setItem(STORAGE_KEY, String(highScore));
-        highScoreEl.textContent = highScore;
-        statusEl.textContent = "New high score. Respect.";
-      } else {
-        statusEl.textContent = "Game over. Try again.";
+      function openGame() {
+        overlay.classList.add("is-open");
+        overlay.setAttribute("aria-hidden", "false");
+        document.body.classList.add("nc-lock-scroll");
       }
-    }
 
-    function removeLogo(node, missed = false) {
-      if (!node || !node.parentNode) return;
-      node.parentNode.removeChild(node);
-      if (missed) handleMiss();
-    }
+      function closeGame() {
+        stopGame();
+        overlay.classList.remove("is-open");
+        overlay.setAttribute("aria-hidden", "true");
+        document.body.classList.remove("nc-lock-scroll");
+      }
 
-    function spawnLogo() {
-      if (!running) return;
-
-      const arenaRect = arena.getBoundingClientRect();
-      const size = getLogoSize();
-      const maxX = Math.max(0, arenaRect.width - size);
-      const maxY = Math.max(0, arenaRect.height - size);
-
-      const logo = document.createElement("button");
-      logo.type = "button";
-      logo.className = "nc-target";
-      logo.style.width = size + "px";
-      logo.style.height = size + "px";
-      logo.style.left = Math.random() * maxX + "px";
-      logo.style.top = Math.random() * maxY + "px";
-
-      const img = document.createElement("img");
-      img.src = "logo.png";
-      img.alt = "Naturalchoice target";
-      logo.appendChild(img);
-
-      logo.addEventListener("click", function () {
-        if (!running) return;
-        score += 1;
-        updateLevel();
+      function resetStats() {
+        score = 0;
+        lives = 3;
+        level = 1;
         updateStats();
-        removeLogo(logo, false);
+        statusEl.textContent = "Catch the logos before they disappear.";
+        arena.innerHTML = "";
+      }
 
+      function updateStats() {
+        scoreEl.textContent = score;
+        livesEl.textContent = lives;
+        levelEl.textContent = level;
+        highScoreEl.textContent = highScore;
+      }
+
+      function getSpawnInterval() {
+        return Math.max(420, 1200 - (level - 1) * 85);
+      }
+
+      function getLogoLifetime() {
+        return Math.max(650, 1800 - (level - 1) * 95);
+      }
+
+      function getLogoSize() {
+        return Math.max(34, 72 - (level - 1) * 2);
+      }
+
+      function getLogosPerWave() {
+        return Math.min(4, 1 + Math.floor((level - 1) / 3));
+      }
+
+      function updateLevel() {
+        level = 1 + Math.floor(score / 8);
+        updateStats();
+      }
+
+      function handleMiss() {
+        if (!running) return;
+        lives -= 1;
+        updateStats();
+        if (lives <= 0) gameOver();
+      }
+
+      function gameOver() {
+        stopGame();
         if (score > highScore) {
           highScore = score;
           localStorage.setItem(STORAGE_KEY, String(highScore));
           highScoreEl.textContent = highScore;
+          statusEl.textContent = "New high score. Respect.";
+        } else {
+          statusEl.textContent = "Game over. Try again.";
+        }
+      }
+
+      function removeLogo(node, missed = false) {
+        if (!node || !node.parentNode) return;
+        node.parentNode.removeChild(node);
+        if (missed) handleMiss();
+      }
+
+      function spawnLogo() {
+        if (!running) return;
+
+        const arenaRect = arena.getBoundingClientRect();
+        const size = getLogoSize();
+        const maxX = Math.max(0, arenaRect.width - size);
+        const maxY = Math.max(0, arenaRect.height - size);
+
+        const target = document.createElement("button");
+        target.type = "button";
+        target.className = "nc-target";
+        target.style.width = size + "px";
+        target.style.height = size + "px";
+        target.style.left = Math.random() * maxX + "px";
+        target.style.top = Math.random() * maxY + "px";
+
+        const img = document.createElement("img");
+        img.src = "logo.png";
+        img.alt = "Naturalchoice target";
+        target.appendChild(img);
+
+        target.addEventListener("click", () => {
+          if (!running) return;
+          score += 1;
+          updateLevel();
+          updateStats();
+          removeLogo(target, false);
+
+          if (score > highScore) {
+            highScore = score;
+            localStorage.setItem(STORAGE_KEY, String(highScore));
+            highScoreEl.textContent = highScore;
+          }
+        });
+
+        arena.appendChild(target);
+
+        const lifetime = getLogoLifetime();
+        window.setTimeout(() => {
+          if (target.parentNode) removeLogo(target, true);
+        }, lifetime);
+      }
+
+      function gameLoop() {
+        if (!running) return;
+
+        const count = getLogosPerWave();
+        for (let i = 0; i < count; i += 1) {
+          spawnLogo();
+        }
+
+        spawnTimer = window.setTimeout(gameLoop, getSpawnInterval());
+      }
+
+      function stopGame() {
+        running = false;
+        if (spawnTimer) {
+          clearTimeout(spawnTimer);
+          spawnTimer = null;
+        }
+        arena.innerHTML = "";
+      }
+
+      function startGame() {
+        stopGame();
+        resetStats();
+        running = true;
+        statusEl.textContent = "Game on.";
+        gameLoop();
+      }
+
+      logoTrigger.addEventListener("click", (event) => {
+        clickCount += 1;
+
+        if (clickResetTimer) clearTimeout(clickResetTimer);
+        clickResetTimer = setTimeout(() => {
+          clickCount = 0;
+        }, 450);
+
+        if (clickCount === 3) {
+          event.preventDefault();
+          clickCount = 0;
+          openGame();
         }
       });
 
-      arena.appendChild(logo);
+      startBtn.addEventListener("click", startGame);
+      restartBtn.addEventListener("click", startGame);
+      closeBtn.addEventListener("click", closeGame);
 
-      const lifetime = getLogoLifetime();
-      window.setTimeout(function () {
-        if (logo.parentNode) removeLogo(logo, true);
-      }, lifetime);
-    }
+      overlay.addEventListener("click", (event) => {
+        if (event.target === overlay) closeGame();
+      });
 
-    function gameLoop() {
-      if (!running) return;
-
-      const count = getLogosPerWave();
-      for (let i = 0; i < count; i += 1) spawnLogo();
-
-      spawnTimer = window.setTimeout(gameLoop, getSpawnInterval());
-    }
-
-    function stopGame() {
-      running = false;
-      if (spawnTimer) {
-        clearTimeout(spawnTimer);
-        spawnTimer = null;
-      }
-      arena.innerHTML = "";
-    }
-
-    function startGame() {
-      stopGame();
-      resetStats();
-      running = true;
-      statusEl.textContent = "Game on.";
-      gameLoop();
-    }
-
-    logoTrigger.addEventListener("click", function (event) {
-      event.preventDefault();
-
-      clickCount += 1;
-
-      if (clickResetTimer) clearTimeout(clickResetTimer);
-      clickResetTimer = setTimeout(function () {
-        clickCount = 0;
-      }, 500);
-
-      if (singleClickTimer) clearTimeout(singleClickTimer);
-
-      if (clickCount === 3) {
-        clickCount = 0;
-        openGame();
-        return;
-      }
-
-      singleClickTimer = setTimeout(function () {
-        if (clickCount < 3) {
-          window.location.href = logoTrigger.getAttribute("href");
+      document.addEventListener("keydown", (event) => {
+        if (event.key === "Escape" && overlay.classList.contains("is-open")) {
+          closeGame();
         }
-      }, 520);
-    });
-
-    startBtn.addEventListener("click", startGame);
-    restartBtn.addEventListener("click", startGame);
-    closeBtn.addEventListener("click", closeGame);
-
-    overlay.addEventListener("click", function (event) {
-      if (event.target === overlay) closeGame();
-    });
-
-    document.addEventListener("keydown", function (event) {
-      if (event.key === "Escape" && overlay.classList.contains("is-open")) {
-        closeGame();
-      }
-    });
-  })();
-</script>
+      });
+    })();
+  </script>
+</body>
+</html>
