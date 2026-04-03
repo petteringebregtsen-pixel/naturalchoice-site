@@ -274,4 +274,24 @@ h1 {
   .hero {
     padding: 60px 0 80px;
   }
+.values-block {
+  margin-top: 32px;
+  margin-bottom: 32px;
+  padding-top: 4px;
+}
+
+.values-list {
+  list-style: none;
+  padding: 0;
+  margin: 14px 0 0;
+  display: grid;
+  gap: 10px;
+}
+
+.values-list li {
+  color: var(--text);
+  font-size: 1.08rem;
+  line-height: 1.5;
+}
+
 }
