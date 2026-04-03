@@ -19,7 +19,7 @@
   <meta name="twitter:title" content="Naturalchoice – Vi bygger sterke snack brands i Norden" />
   <meta name="twitter:description" content="Naturalchoice bygger og utvikler utvalgte snack brands i Norden gjennom kommersiell forståelse og lokal gjennomføring." />
   <meta name="twitter:image" content="https://naturalchoice.no/thumbnail.png?v=2" />
-  <link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png" />
+
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
@@ -157,15 +157,17 @@
       const statusEl = document.getElementById("ncGameStatus");
 
       const STORAGE_KEY = "naturalchoice_logo_game_highscore";
-      let highScore = Number(localStorage.getItem(STORAGE_KEY) || 0);
+      const DOUBLE_CLICK_WINDOW = 320;
 
+      let highScore = Number(localStorage.getItem(STORAGE_KEY) || 0);
       let score = 0;
       let lives = 3;
       let level = 1;
       let running = false;
       let spawnTimer = null;
+
       let clickCount = 0;
-      let clickResetTimer = null;
+      let clickTimer = null;
 
       highScoreEl.textContent = highScore;
 
@@ -187,8 +189,8 @@
         score = 0;
         lives = 3;
         level = 1;
-        updateStats();
         arena.innerHTML = "";
+        updateStats();
       }
 
       function updateStats() {
@@ -267,6 +269,7 @@
 
         target.addEventListener("click", () => {
           if (!running) return;
+
           score += 1;
           updateLevel();
           updateStats();
@@ -283,7 +286,9 @@
 
         const lifetime = getLogoLifetime();
         window.setTimeout(() => {
-          if (target.parentNode) removeLogo(target, true);
+          if (target.parentNode) {
+            removeLogo(target, true);
+          }
         }, lifetime);
       }
 
@@ -316,18 +321,25 @@
       }
 
       logoTrigger.addEventListener("click", (event) => {
+        event.preventDefault();
+
         clickCount += 1;
 
-        if (clickResetTimer) clearTimeout(clickResetTimer);
-        clickResetTimer = setTimeout(() => {
-          clickCount = 0;
-        }, 450);
-
-        if (clickCount === 2) {
-          event.preventDefault();
-          clickCount = 0;
-          openGame();
+        if (clickTimer) {
+          clearTimeout(clickTimer);
+          clickTimer = null;
         }
+
+        clickTimer = window.setTimeout(() => {
+          if (clickCount === 1) {
+            window.location.href = logoTrigger.href;
+          } else if (clickCount >= 2) {
+            openGame();
+          }
+
+          clickCount = 0;
+          clickTimer = null;
+        }, DOUBLE_CLICK_WINDOW);
       });
 
       startBtn.addEventListener("click", startGame);
@@ -335,7 +347,9 @@
       closeBtn.addEventListener("click", closeGame);
 
       overlay.addEventListener("click", (event) => {
-        if (event.target === overlay) closeGame();
+        if (event.target === overlay) {
+          closeGame();
+        }
       });
 
       document.addEventListener("keydown", (event) => {
